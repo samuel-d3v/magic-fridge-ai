@@ -46,12 +46,14 @@ public class FoodItemService {
     }
 
     public FoodItemResponseDTO updateById(long id, RegisterFoodItemRequest request) {
-        findById(id);
+        FoodItem existItem = repository.findById(id)
+                .orElseThrow(
+                        () -> new IllegalArgumentException("teste")
+                );
 
-        FoodItem item = mapper.toEntity(request);
-        item.setId(id);
+        mapper.applyPatch(request, existItem);
 
-        FoodItem itemSalvo = repository.save(item);
+        FoodItem itemSalvo = repository.save(existItem);
         return mapper.toDTO(itemSalvo);
     }
 
