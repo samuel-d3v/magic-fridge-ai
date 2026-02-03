@@ -49,4 +49,22 @@ public class FoodItemMapper {
                 form.getValidade()
         );
     }
+
+    /**
+     * Mapeia as informações do DTO request que não forem nulas para a entidade food item
+     */
+    public void applyPatch(RegisterFoodItemRequest dto, FoodItem entity) {
+        if(dto.nome() != null) {
+            entity.setNome(dto.nome());
+        }
+        if(dto.categoria() != null) {
+            entity.setCategoria(dto.categoria());
+        }
+        if(dto.quantidade() != null) {
+            entity.setQuantidade(dto.quantidade());
+        }
+        if(dto.validade() != null) {
+            entity.setValidade(dto.validade());
+        }
+    }
 }
