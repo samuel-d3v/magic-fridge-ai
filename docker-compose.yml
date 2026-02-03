@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:17
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    restart: always
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  app:
+    image: magicfridge-app:0.0.1-SNAPSHOT
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+
+volumes:
+  postgres-data:
