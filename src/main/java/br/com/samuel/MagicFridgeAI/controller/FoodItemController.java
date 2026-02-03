@@ -36,7 +36,7 @@ public class FoodItemController {
         return ResponseEntity.ok(item);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<FoodItemResponseDTO> updateItem(@PathVariable long id, @RequestBody RegisterFoodItemRequest request) {
         FoodItemResponseDTO item = service.updateById(id, request);
         return ResponseEntity.ok(item);
