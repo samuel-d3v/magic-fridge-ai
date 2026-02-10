@@ -16,7 +16,7 @@ public class FoodRecipeService {
         this.webClient = webClient;
     }
 
-    public Mono<ResponseEntity<String>> generateRecipe() {
+    public Mono<String> generateRecipe() {
         String prompt = "Me sugira uma receita simples com ingredientes comuns.";
 
         Map<String, Object> requestBody = Map.of(
@@ -44,7 +44,7 @@ public class FoodRecipeService {
         return fetchResponse(requestBody);
     }
 
-    private Mono<ResponseEntity<String>> fetchResponse(Map<String, Object> requestBody) {
+    private Mono<String> fetchResponse(Map<String, Object> requestBody) {
         return webClient.post()
                 .uri("/responses")
                 .bodyValue(requestBody)
@@ -53,7 +53,7 @@ public class FoodRecipeService {
                 .map(response -> {
                     String text = extractOutputText(response);
 
-                    return text != null ? ResponseEntity.ok().body(text) : ResponseEntity.ok().body("Nenhuma receita foi gerada");
+                    return text != null ? text : "Nenhuma receita foi gerada";
                 });
     }
 
