@@ -5,7 +5,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClient;
+
+import java.time.Duration;
 
 @Configuration
 public class WebClientConfig {
@@ -16,6 +20,9 @@ public class WebClientConfig {
     public WebClient.Builder webClientBuilder() {
         return WebClient.builder();
     }
+
+    private HttpClient httpClient = HttpClient.create()
+            .responseTimeout(Duration.ofSeconds(90));
 
     @Bean
     public WebClient webClient(WebClient.Builder builder, OpenAiProperties properties) {
@@ -29,6 +36,7 @@ public class WebClientConfig {
                         HttpHeaders.AUTHORIZATION,
                         "Bearer " + properties.apiKey()
                 )
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }
 }
