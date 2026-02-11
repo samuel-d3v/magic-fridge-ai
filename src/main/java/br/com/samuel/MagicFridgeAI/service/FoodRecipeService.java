@@ -1,12 +1,13 @@
 package br.com.samuel.MagicFridgeAI.service;
 
-import org.springframework.http.ResponseEntity;
+import br.com.samuel.MagicFridgeAI.model.dto.FoodItemResponseDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class FoodRecipeService {
@@ -16,8 +17,12 @@ public class FoodRecipeService {
         this.webClient = webClient;
     }
 
-    public Mono<String> generateRecipe() {
-        String prompt = "Me sugira uma receita simples com ingredientes comuns.";
+    public Mono<String> generateRecipe(List<FoodItemResponseDTO> items) {
+        String alimento = items.stream()
+                .map(item -> String.format("Nome: %s - Categoria: %s, Quantidade: %d, Validade: %td/%tm/%tY", item.nome(), item.categoria(), item.quantidade(), item.validade(), item.validade(), item.validade()))
+                .collect(Collectors.joining("\n"));
+
+        String prompt = "Baseado no meu banco de dados, faça uma receita com os seguintes itens: " + alimento;
 
         Map<String, Object> requestBody = Map.of(
                 "model", "gpt-5-nano",
